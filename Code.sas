@@ -1,19 +1,19 @@
-/*Importation des données sous SAS*/  
+/*Importation des donnÃ©es sous SAS*/  
 PROC IMPORT DATAFILE="C:\Users\f21204892\Documents\PROJET\Data_projet1.csv" OUT=Covid_data REPLACE dbms=CSV;
 delimiter=';';
 run;
 
-/* Affichage de la table des matières des données */
+/* Affichage de la table des matiÃ¨res des donnÃ©es */
 proc contents data=Covid_data;
 run;
 
-/* Création de la variable binaire  "Mesures_stop_covid1"  ("oui"=1 et "non"=0) */
+/* CrÃ©ation de la variable binaire  "Mesures_stop_covid1"  ("oui"=1 et "non"=0) */
 data Covid_data1;
 	set Covid_data;
-if Mesures_stop_covid="Plutôt oui" then Mesures_stop_covid1="Oui";
+if Mesures_stop_covid="PlutÃ´t oui" then Mesures_stop_covid1="Oui";
 else if Mesures_stop_covid="." then delete;
-else if Mesures_stop_covid="Oui, tout à fait" then Mesures_stop_covid1="Oui";
-else if Mesures_stop_covid=" Plutôt non " then Mesures_stop_covid1="Non";
+else if Mesures_stop_covid="Oui, tout Ã  fait" then Mesures_stop_covid1="Oui";
+else if Mesures_stop_covid=" PlutÃ´t non " then Mesures_stop_covid1="Non";
 else if Mesures_stop_covid="Non, pas du tout" then Mesures_stop_covid1="Non";
 run;
 
@@ -35,7 +35,7 @@ run;
 
 data Covid_data4;
 	set Covid_data3;	
-if Bac="Général" then Bac1=1;
+if Bac="GÃ©nÃ©ral" then Bac1=1;
 else if Bac="Technologique" then Bac1=0;
 else if Bac="Professionnel" then Bac1=0;
 else if Bac="Autre" then Bac1=0;
@@ -67,28 +67,23 @@ else if Regime_inscription="Mo" then Regime_inscription1=0;
 else if Regime_inscription="Re" then Regime_inscription1=0;
 run;
 
-/* On fait l'estimation des coefficients du  modèle logit liant les valeurs présentes de notre variable d'intérèt et nos variables explicatives */
+/* On fait l'estimation des coefficients du  modÃ¨le logit liant les valeurs prÃ©sentes de notre variable d'intÃ©rÃªt et nos variables explicatives */
 proc logistic data = Covid_data8;
 model Mesures_stop_covid1(event='Oui')= Boursier1 Nationalite_R1 Bac1 Tiers_temps1 Composante1 
 Genre1 Regime_inscription1;
 run;
 
-/* On refait l'estimation en conservant les variables signficatives au seuil de /*Importation des données sous SAS*/  
-PROC IMPORT DATAFILE="C:\Users\f21204892\Documents\PROJET\Data_projet1.csv" OUT=Covid_data REPLACE dbms=CSV;
-delimiter=';';
-run;
-
-/* Affichage de la table des matières des données */
+/* Affichage de la table des matiÃ¨res des donnÃ©es */
 proc contents data=Covid_data;
 run;
 
-/* Création de la variable binaire  "Mesures_stop_covid1"  ("oui"=1 et "non"=0) */
+/* CrÃ©ation de la variable binaire  "Mesures_stop_covid1"  ("oui"=1 et "non"=0) */
 data Covid_data1;
 	set Covid_data;
-if Mesures_stop_covid="Plutôt oui" then Mesures_stop_covid1="Oui";
+if Mesures_stop_covid="PlutÃ´t oui" then Mesures_stop_covid1="Oui";
 else if Mesures_stop_covid="." then delete;
-else if Mesures_stop_covid="Oui, tout à fait" then Mesures_stop_covid1="Oui";
-else if Mesures_stop_covid=" Plutôt non " then Mesures_stop_covid1="Non";
+else if Mesures_stop_covid="Oui, tout Ã  fait" then Mesures_stop_covid1="Oui";
+else if Mesures_stop_covid=" PlutÃ´t non " then Mesures_stop_covid1="Non";
 else if Mesures_stop_covid="Non, pas du tout" then Mesures_stop_covid1="Non";
 run;
 
@@ -110,7 +105,7 @@ run;
 
 data Covid_data4;
 	set Covid_data3;	
-if Bac="Général" then Bac1=1;
+if Bac="GÃ©nÃ©ral" then Bac1=1;
 else if Bac="Technologique" then Bac1=0;
 else if Bac="Professionnel" then Bac1=0;
 else if Bac="Autre" then Bac1=0;
@@ -153,7 +148,7 @@ proc logistic data = Covid_data8;
 model Mesures_stop_covid1(event='Oui')= Boursier1 Nationalite_R1 Bac1 Tiers_temps1 Composante1 
 Genre1 Regime_inscription1 / selection=forward slentry=0.01;
 run;  
-/* On fait la prédiction des valeurs manquantes de notre variable d'intérèt à partir du modèle estimé*/
+/* On fait la prÃ©diction des valeurs manquantes de notre variable d'intÃ©rÃªt Ã  partir du modÃ¨le estimÃ©*/
 
  data Covid_data9;
 	set Covid_data8;
@@ -161,7 +156,7 @@ run;
  else Proba_estimee=".";
  run;
 
- /* On crée une nouvelle variable qui contient les valeurs pour les répondants à notre variable d'intéret et les valeurs estimées pour les non répondants par modèle 
+ /* On crÃ©e une nouvelle variable qui contient les valeurs pour les rÃ©pondants Ã  notre variable d'intÃ©rÃªt et les valeurs estimÃ©es pour les non rÃ©pondants par modÃ¨le 
  logit */
  data Covid_data_10;
  	set Covid_data9;
@@ -169,13 +164,13 @@ run;
  else if Proba_estimee < 0.5 then Mesures_stop_covid2 = "Non";
  else if Mesures_stop_covid2 = Mesures_stop_covid1;
 run;
-/*  Création de la variable binaire  "Mesures_stop_covid3"  ("oui"=1 et "non"=0)  */
+/*  CrÃ©ation de la variable binaire  "Mesures_stop_covid3"  ("oui"=1 et "non"=0)  */
 data Covid_data_final;
 	  set Covid_data_10;
 if Mesures_stop_covid2 = "Oui" then Mesures_stop_covid3 = 1;
 else if Mesures_stop_covid2 = "Non" then Mesures_stop_covid3 = 0;
 run;
-/* Statistiques de la variable Mesures_stop_covid3,estimation de la proportion des individus ayant répondu oui à notre variable d'intérêt dans la grande population  */
+/* Statistiques de la variable Mesures_stop_covid3, estimation de la proportion des individus ayant rÃ©pondu oui Ã  notre variable d'intÃ©rÃªt dans la grande population  */
 Proc means
 	data=Covid_data_final;
 var Mesures_stop_covid3;
